@@ -1,12 +1,11 @@
-package com.kantarix.home_service.api.dto
+package com.kantarix.home_service.api.dto.request
 
 import org.hibernate.validator.constraints.Length
+import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 
-
-data class HomeDto(
-    val id: Int,
-
+data class HomeRequest(
+    @field:NotNull
     @field:Length(min = 2, message = "Name length must be greater than 2.")
     val name: String,
 

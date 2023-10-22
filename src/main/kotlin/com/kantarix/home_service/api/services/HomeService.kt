@@ -1,8 +1,11 @@
 package com.kantarix.home_service.api.services
 
-import com.kantarix.home_service.api.dto.HomeDto
+import com.kantarix.home_service.api.dto.Home
+import com.kantarix.home_service.api.dto.HomeSimple
+import com.kantarix.home_service.api.dto.request.HomeRequest
 import com.kantarix.home_service.api.repositories.HomeRepository
-import com.kantarix.home_service.store.entities.Home
+import com.kantarix.home_service.store.entities.HomeEntity
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,33 +16,34 @@ class HomeService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getHomes(): List<Home> = homeRepository.findAll()
+    fun getHomes(): List<HomeSimple> = homeRepository.findAll().map { it.toHomeSimpleDto() }
 
     @Transactional(readOnly = true)
-    fun getHome(homeId: Int): Home = homeRepository.findById(homeId).get()
+    fun getHome(homeId: Int): Home = homeRepository.findByIdOrNull(homeId)
+        ?.toHomeDto()
+        ?: throw NoSuchElementException("Home with id $homeId does not exist.")
 
-    fun createHome(homeDto: HomeDto): Home =
-        homeRepository.save(
-            Home(
-                name = homeDto.name,
-                address = homeDto.address,
-            )
-        )
+    fun createHome(home: HomeRequest): Home =
+        home.toEntity()
+            .let { homeRepository.save(it) }
+            .toHomeDto()
 
-    fun editHome(homeId: Int, homeDto: HomeDto): Home {
-        val home = homeRepository.findById(homeId).get()
-
-        return homeRepository.save(
-            home.copy(
-                name = homeDto.name,
-                address = homeDto.address ?: home.address,
-            )
-        )
-    }
+    fun editHome(homeId: Int, home: HomeRequest): Home =
+        homeRepository.findByIdOrNull(homeId)
+            ?.let { homeRepository.save(home.toEntity(homeId)) }
+            ?.toHomeDto()
+            ?: throw NoSuchElementException("Home with id $homeId does not exist.")
 
     fun deleteHome(homeId: Int) {
-        homeRepository.findById(homeId).get()
-        homeRepository.deleteById(homeId)
+        homeRepository.findByIdOrNull(homeId)
+            ?.let { homeRepository.deleteById(homeId) }
+            ?: throw NoSuchElementException("Home with id $homeId does not exist.")
     }
 
+    private fun HomeRequest.toEntity(id: Int = -1) =
+        HomeEntity (
+            id = id,
+            name = name,
+            address = address,
+        )
 }

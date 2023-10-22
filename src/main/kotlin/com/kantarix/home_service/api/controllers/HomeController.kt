@@ -1,8 +1,10 @@
 package com.kantarix.home_service.api.controllers
 
-import com.kantarix.home_service.api.dto.HomeDto
+import com.kantarix.home_service.api.dto.Home
+import com.kantarix.home_service.api.dto.HomeSimple
+import com.kantarix.home_service.api.dto.request.HomeRequest
 import com.kantarix.home_service.api.services.HomeService
-import com.kantarix.home_service.store.entities.Home
+import com.kantarix.home_service.store.entities.HomeEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
@@ -13,7 +15,7 @@ class HomeController(
 ) {
 
     @GetMapping()
-    fun getHomes(): List<Home> = homeService.getHomes()
+    fun getHomes(): List<HomeSimple> = homeService.getHomes()
 
     @GetMapping("/{homeId}")
     fun getHome(
@@ -22,14 +24,14 @@ class HomeController(
 
     @PostMapping
     fun createHome(
-        @Validated @RequestBody homeDto: HomeDto,
-    ): Home = homeService.createHome(homeDto)
+        @Validated @RequestBody home: HomeRequest,
+    ): Home = homeService.createHome(home)
 
     @PutMapping("/{homeId}")
     fun editHome(
         @PathVariable("homeId") homeId: Int,
-        @Validated @RequestBody homeDto: HomeDto,
-    ): Home = homeService.editHome(homeId, homeDto)
+        @Validated @RequestBody home: HomeRequest,
+    ): Home = homeService.editHome(homeId, home)
 
     @DeleteMapping("/{homeId}")
     fun deleteHome(
