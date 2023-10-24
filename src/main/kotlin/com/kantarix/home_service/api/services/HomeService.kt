@@ -9,7 +9,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-@Transactional
 @Service
 class HomeService(
     private val homeRepository: HomeRepository
@@ -23,17 +22,20 @@ class HomeService(
         ?.toHomeDto()
         ?: throw NoSuchElementException("Home with id $homeId does not exist.")
 
+    @Transactional
     fun createHome(home: HomeRequest): Home =
         home.toEntity()
             .let { homeRepository.save(it) }
             .toHomeDto()
 
+    @Transactional
     fun editHome(homeId: Int, home: HomeRequest): Home =
         homeRepository.findByIdOrNull(homeId)
             ?.let { homeRepository.save(home.toEntity(homeId)) }
             ?.toHomeDto()
             ?: throw NoSuchElementException("Home with id $homeId does not exist.")
 
+    @Transactional
     fun deleteHome(homeId: Int) {
         homeRepository.findByIdOrNull(homeId)
             ?.let { homeRepository.deleteById(homeId) }
