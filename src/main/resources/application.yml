@@ -1,0 +1,17 @@
+server:
+  port: 5000
+
+logging:
+  level:
+    com.kantarix.home_service: DEBUG
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/home_service_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
