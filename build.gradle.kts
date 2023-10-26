@@ -38,6 +38,14 @@ dependencies {
 	implementation("io.github.microutils:kotlin-logging:3.0.5")
 }
 
+allOpen {
+	annotations(
+		"javax.persistence.Entity",
+		"javax.persistence.MappedSuperclass",
+		"javax.persistence.Embeddable"
+	)
+}
+
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
