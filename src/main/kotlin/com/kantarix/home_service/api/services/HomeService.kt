@@ -37,11 +37,10 @@ class HomeService(
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
     @Transactional
-    fun deleteHome(homeId: Int) {
+    fun deleteHome(homeId: Int) =
         homeRepository.findByIdOrNull(homeId)
             ?.let { homeRepository.deleteById(homeId) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
-    }
 
     private fun HomeRequest.toEntity(id: Int = -1) =
         HomeEntity (

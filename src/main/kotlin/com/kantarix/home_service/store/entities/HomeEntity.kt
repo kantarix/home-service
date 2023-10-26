@@ -6,6 +6,7 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
@@ -20,12 +21,16 @@ class HomeEntity(
 
     val address: String?,
 
+    @OneToMany(mappedBy = "roomId", targetEntity = RoomEntity::class)
+    var rooms: List<RoomEntity>? = null,
+
 ) {
     fun toHomeDto() =
         Home (
             id = id,
             name = name,
             address = address,
+            rooms = rooms?.map { it.toRoomDto() } ?: emptyList(),
         )
 
     fun toHomeSimpleDto() =
