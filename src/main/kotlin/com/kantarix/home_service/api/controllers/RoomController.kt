@@ -3,7 +3,6 @@ package com.kantarix.home_service.api.controllers
 import com.kantarix.home_service.api.dto.Room
 import com.kantarix.home_service.api.dto.request.RoomRequest
 import com.kantarix.home_service.api.services.RoomService
-import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -11,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
-@Controller
+@RestController
 @RequestMapping("/api/rooms")
 class RoomController(
     private val roomService: RoomService
@@ -20,8 +21,9 @@ class RoomController(
 
     @PostMapping
     fun createRoom(
+        @RequestParam homeId: Int,
         @Validated @RequestBody room: RoomRequest,
-    ): Room = roomService.createRoom(room)
+    ): Room = roomService.createRoom(homeId, room)
 
     @PutMapping("/{roomId}")
     fun editRoom(

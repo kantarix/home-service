@@ -2,7 +2,10 @@ package com.kantarix.home_service.store.entities
 
 import com.kantarix.home_service.api.dto.Home
 import com.kantarix.home_service.api.dto.HomeSimple
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -21,7 +24,8 @@ class HomeEntity(
 
     val address: String?,
 
-    @OneToMany(mappedBy = "roomId", targetEntity = RoomEntity::class)
+    @OneToMany(mappedBy = "home", targetEntity = RoomEntity::class, fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     var rooms: List<RoomEntity>? = null,
 
 ) {

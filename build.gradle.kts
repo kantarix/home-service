@@ -33,6 +33,8 @@ dependencies {
 	 * Other
 	 */
 	implementation("org.postgresql:postgresql:42.6.0")
+	implementation("org.liquibase:liquibase-core:4.24.0")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("io.github.microutils:kotlin-logging:3.0.5")

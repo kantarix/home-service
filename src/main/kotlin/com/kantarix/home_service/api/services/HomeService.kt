@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class HomeService(
-    private val homeRepository: HomeRepository
+    private val homeRepository: HomeRepository,
 ) {
 
     @Transactional(readOnly = true)
