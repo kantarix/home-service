@@ -2,8 +2,6 @@ package com.kantarix.home_service.store.entities
 
 import com.kantarix.home_service.api.dto.Home
 import com.kantarix.home_service.api.dto.HomeSimple
-import org.hibernate.annotations.OnDelete
-import org.hibernate.annotations.OnDeleteAction
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
@@ -25,7 +23,6 @@ class HomeEntity(
     val address: String?,
 
     @OneToMany(mappedBy = "home", targetEntity = RoomEntity::class, fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     var rooms: List<RoomEntity>? = null,
 
 ) {

@@ -9,7 +9,6 @@ import com.kantarix.home_service.store.entities.HomeEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import kotlin.jvm.optionals.getOrNull
 
 @Service
 class HomeService(
@@ -20,7 +19,7 @@ class HomeService(
     fun getHomes(): List<HomeSimple> = homeRepository.findAll().map { it.toHomeSimpleDto() }
 
     @Transactional(readOnly = true)
-    fun getHome(homeId: Int): Home = homeRepository.findById(homeId).getOrNull()
+    fun getHome(homeId: Int): Home = homeRepository.findHomeEntityById(homeId)
         ?.toHomeDto()
         ?: throw ApiError.HOME_NOT_FOUND.toException()
 
