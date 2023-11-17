@@ -5,8 +5,7 @@ import org.hibernate.validator.constraints.Length
 import javax.validation.constraints.NotBlank
 
 data class RoomRequest (
-    @field:NotBlank(message = "Name {javax.validation.constraints.NotBlank.message}")
-    @field:Length(min = 2, message = "Name {org.hibernate.validator.constraints.Length.message}")
+    @field:NotBlank
     @JsonProperty("name")
     private val _name: String?,
 ) {

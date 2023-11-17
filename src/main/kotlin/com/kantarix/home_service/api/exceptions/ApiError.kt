@@ -8,11 +8,11 @@ enum class ApiError(
 ) {
     HOME_NOT_FOUND(
         HttpStatus.NOT_FOUND,
-        "Home does not exist."
+        "apiErrors.HOME_NOT_FOUND"
     ),
     ROOM_NOT_FOUND(
         HttpStatus.NOT_FOUND,
-        "Room does not exist."
+        "apiErrors.ROOM_NOT_FOUND"
     ),
     ;
 
