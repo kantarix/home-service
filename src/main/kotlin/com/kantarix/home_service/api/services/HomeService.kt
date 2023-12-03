@@ -16,16 +16,19 @@ class HomeService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getHomes(): List<HomeSimple> = homeRepository.findAll().map { it.toHomeSimpleDto() }
+    fun getHomes(ownerId: Int): List<HomeSimple> =
+        homeRepository.findAllByOwnerId(ownerId)
+            .map { it.toHomeSimpleDto() }
 
     @Transactional(readOnly = true)
-    fun getHome(homeId: Int): Home = homeRepository.findHomeEntityById(homeId)
-        ?.toHomeDto()
-        ?: throw ApiError.HOME_NOT_FOUND.toException()
+    fun getHome(homeId: Int): Home =
+        homeRepository.findHomeEntityById(homeId)
+            ?.toHomeDto()
+            ?: throw ApiError.HOME_NOT_FOUND.toException()
 
     @Transactional
-    fun createHome(home: HomeRequest): Home =
-        home.toEntity()
+    fun createHome(ownerId: Int, home: HomeRequest): Home =
+        home.toEntity(ownerId)
             .let { homeRepository.save(it) }
             .toHomeDto()
 
@@ -42,9 +45,19 @@ class HomeService(
             ?.let { homeRepository.deleteById(homeId) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
-    private fun HomeRequest.toEntity(id: Int = -1) =
+    @Transactional(readOnly = true)
+    fun checkOwnership(homeId: Int, ownerId: Int): Boolean =
+        homeRepository.findByIdOrNull(homeId)
+            ?.checkIsAccessAllowed(ownerId)
+            ?: throw ApiError.HOME_NOT_FOUND.toException()
+
+    fun HomeEntity.checkIsAccessAllowed(ownerId: Int) =
+        (this.ownerId == ownerId).takeIf { it }
+
+    private fun HomeRequest.toEntity(ownerId: Int, id: Int = -1) =
         HomeEntity (
             id = id,
+            ownerId = ownerId,
             name = name,
             address = address,
         )

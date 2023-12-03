@@ -5,6 +5,7 @@
 create table homes
 (
     id                  int not null generated always as identity,
+    owner_id            int not null,
     name                varchar not null,
     address             varchar,
     primary key (id)

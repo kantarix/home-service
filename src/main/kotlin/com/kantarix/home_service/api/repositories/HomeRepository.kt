@@ -9,4 +9,6 @@ interface HomeRepository : JpaRepository<HomeEntity, Int> {
     @EntityGraph(attributePaths = ["rooms"])
     fun findHomeEntityById(id: Int): HomeEntity?
 
+    fun findAllByOwnerId(id: Int): List<HomeEntity>
+
 }

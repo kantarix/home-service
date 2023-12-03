@@ -9,7 +9,7 @@ import com.kantarix.home_service.store.entities.HomeEntity
 import com.kantarix.home_service.store.entities.RoomEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import javax.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RoomService(
@@ -34,9 +34,18 @@ class RoomService(
 
     @Transactional
     fun deleteRoom(roomId: Int) =
-        roomRepository.findByIdOrNull(roomId)
+        roomRepository.findRoomEntityById(roomId)
             ?.let { roomRepository.deleteById(roomId) }
             ?: throw ApiError.ROOM_NOT_FOUND.toException()
+
+    @Transactional(readOnly = true)
+    fun checkOwnership(roomId: Int, ownerId: Int): Boolean =
+        roomRepository.findRoomEntityById(roomId)
+            ?.checkIsAccessAllowed(ownerId)
+            ?: throw ApiError.ROOM_NOT_FOUND.toException()
+
+    fun RoomEntity.checkIsAccessAllowed(ownerId: Int) =
+        (this.home.ownerId == ownerId).takeIf { it }
 
     private fun RoomRequest.toEntity(id: Int = -1, home: HomeEntity) =
         RoomEntity(

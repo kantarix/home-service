@@ -18,6 +18,8 @@ class HomeEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int = -1,
 
+    val ownerId: Int,
+
     val name: String,
 
     val address: String?,
