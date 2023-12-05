@@ -18,3 +18,11 @@ create table rooms
     home_id             int not null references homes on delete cascade,
     primary key (id)
 );
+
+create table outbox_messages
+(
+    id                  int not null generated always as identity,
+    topic               varchar not null,
+    message             varchar not null,
+    primary key (id)
+);
