@@ -42,7 +42,7 @@ class HomeService(
     @Transactional
     fun editHome(homeId: Int, home: HomeRequest): Home =
         homeRepository.findByIdOrNull(homeId)
-            ?.let { homeRepository.save(home.toEntity(homeId)) }
+            ?.let { homeRepository.save(home.toEntity(it.ownerId, homeId)) }
             ?.toHomeDto()
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
