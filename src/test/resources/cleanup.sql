@@ -1,0 +1,3 @@
+ALTER SEQUENCE homes_id_seq RESTART WITH 1;
+ALTER SEQUENCE rooms_id_seq RESTART WITH 1;
+ALTER SEQUENCE outbox_messages_id_seq RESTART WITH 1;
